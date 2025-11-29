@@ -42,10 +42,10 @@ app.secret_key = os.getenv("LO_SECRET_KEY")
 
 @app.route("/new", methods=["POST"])
 def new():
-    if 'exists' in session:
+    if 'id' in session:
         return render_template("error.html", error="called new endpoint with existing session"), 400
     
-    session['exists'] = True
+    session['id'] = hashlib.sha256(request.remote_addr.encode("utf-8")).hexdigest()
     temp_path = os.path.join(UPLOADS_FOLDER, session['id'])
 
     if not os.path.exists(temp_path):
@@ -55,7 +55,7 @@ def new():
 
 @app.route("/add", methods=["POST"])
 def add_file():
-    if 'exists' not in session:
+    if 'id' not in session:
         return render_template('error.html', error="called endpoint without active session"), 400
 
     if 'file' not in request.files:
@@ -72,7 +72,7 @@ def add_file():
 
 @app.route("/remove", methods=["POST"])
 def remove():
-    if 'exists' not in session:
+    if 'id' not in session:
         return render_template('error.html', error="called endpoint without active session"), 400
 
     if 'filename' not in request.form:
@@ -88,7 +88,7 @@ def remove():
 
 @app.route("/compile", methods=["POST"])
 def compile():
-    if 'exists' not in session:
+    if 'id' not in session:
         return render_template('error.html', error="called endpoint without active session"), 400
 
     if "source" not in request.form:
@@ -108,7 +108,7 @@ def compile():
 
 @app.route("/end", methods=["POST"])
 def end():
-    if 'exists' not in session:
+    if 'id' not in session:
         return render_template('error.html', error="called endpoint without active session"), 400
 
     shutil.rmtree(os.path.join(UPLOADS_FOLDER, session["id"]), ignore_errors=True)
