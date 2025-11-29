@@ -4,6 +4,14 @@ const textEditor = document.querySelector("textarea");
 const codeDisplay = document.querySelector("code");
 
 editor.addEventListener("input", updateDisplay);
+editor.addEventListener("keydown", handleKey) ;
+
+function handleKey(e) {
+    if (e.key === "Tab") {
+        e.preventDefault();
+        textEditor.value += "\t";
+    }
+}
 
 function updateDisplay() {
     console.log("Change!");
