@@ -98,6 +98,9 @@ def compile():
     if "source" not in request.form:
         return render_template('error.html', error="sent compilation task without source"), 400
     
+    if len(request.form["source"]) == 0:
+        return render_template('error.html', error="sent empty source file"), 400
+
     source_dir = os.path.join(UPLOADS_FOLDER, session['id'])
     source_file = os.path.join(source_dir, 'source.tex')
 
