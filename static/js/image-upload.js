@@ -21,9 +21,6 @@ function addImage(){
     imageFileNames.push(fetch('/add', {
       method: 'POST',
       body: data
-<<<<<<< Updated upstream
-    }));
-=======
     }).then((response) => response.json())
       .then((val) => imageFileNames.push(val)))();
 
@@ -37,17 +34,20 @@ function addImage(){
 
     imageDisplayButton.innerText = 'Delete Image';
     imageDisplayButton.type = 'button';
-    imageDisplayButton.
+    imageDisplayButton.id = imageFileName;
+
+    imageDisplayButton.addEventListener("change", removeImage);
 
     imageDisplaySpan.appendChild(imageDisplayText);
     imageDisplaySpan.appendChild(imageDisplayButton);
     
     imageFileContainer.appendChild(imageDisplaySpan);
->>>>>>> Stashed changes
 }
 
-function removeImage(imageFileName){
-    removeItem(imageFileNames, imageFileName);
+function removeImage(e){
+    imageFileName = e.id;
+
+    e.target.parentNode.remove();
 
     fetch('/remove'), {
         method: 'POST',
