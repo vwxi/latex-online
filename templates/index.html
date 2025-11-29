@@ -11,17 +11,17 @@
     <body style="font-family: Bentham" class="flex flex-col grow items-center gap-5 my-5 h-screen">
         <h1 class="content-center text-center text-6xl bg-pink-600 text-white w-5/6 p-3 rounded-md">LazyTex</h1>
         <section class="flex flex-row w-5/6 justify-between flex-1 h-screen gap-2">
-            <div id="image-file-container" class="inline-block border-3 w-1/4">
+            <div id="image-file-container" class="inline-block border-3 w-1/4 rounded-md">
                 <h2 class="text-center text-3xl bg-pink-300">Images</h2>
                 <input type="file" accept=".png, .jpg, .jpeg" id="img-input" class="w-40">
             </div>
             <div id="left-box" class="relative w-3/8">
-                <textarea id="editor" class=" absolute top-0 left-0 border-3 z-2 w-full h-full" style="resize:none"></textarea>
+                <textarea id="editor" class=" absolute top-0 left-0 border-3 rounded-md z-2 w-full h-full" style="resize:none"></textarea>
                 <pre>
                     <code class="absolute top-0 left-0" style="font-family: Bentham"></code>
                 </pre>
             </div>
-            <iframe id="loaded-pdf" class="border-3 w-3/8">asda</iframe>
+            <iframe id="loaded-pdf" class="border-3 w-3/8 rounded-md">asda</iframe>
         </section>
         <button type="submit" id="compile" class="">Compile</button>
         <button type="submit" id="export" class="block">Export</button>
