@@ -89,3 +89,4 @@ pyrightconfig.json
 *.vsix
 .history
 .ionide
+cache/
