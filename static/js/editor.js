@@ -22,11 +22,19 @@ function updateDisplay() {
 }
 
 const compileButton = document.getElementById("compile");
-compileButton.addEventListener("click", e => {
+compileButton.addEventListener("click", async (e) => {
     var data = new FormData();
     data.append("source", textEditor.value);
 
-    var resp = (async () => await fetch('/compile', { method: 'POST', body: data }))();
-    console.log(resp);
+    console.log(textEditor.value);
+
+    var resp = await fetch('/compile', { method: 'POST', body: data });
+    var reader = resp.body.getReader();
+    var buf = await reader.read();
+    var blob = new Blob(buf.value, { type: "application/pdf" });
+    var url = URL.createObjectURL(blob);
+    
+    var iframe = document.getElementsByTagName("iframe")[0];
+    iframe.src = url;
 });
 
