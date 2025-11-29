@@ -8,7 +8,7 @@
         <script src="{{ url_for('static', filename='js/editor.js')}}" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     </head>
-    <body style="font-family: Bentham" class="flex flex-col grow items-center gap-5 my-5">
+    <body style="font-family: Bentham" class="flex flex-col grow items-center gap-5 my-5 h-screen">
         <h1 class="content-center text-center text-6xl bg-pink-600 text-white w-5/6 p-3 rounded-md">LazyTex</h1>
         <section class="flex flex-row w-5/6 justify-between flex-1 h-screen gap-2">
             <div id="image-file-container" class="inline-block border-3 w-1/4">
@@ -23,7 +23,7 @@
             </div>
             <iframe id="loaded-pdf" class="border-3 w-3/8">asda</iframe>
         </section>
-        <button type="submit" id="compile" class="block">Compile</button>
+        <button type="submit" id="compile" class="">Compile</button>
         <button type="submit" id="export" class="block">Export</button>
     </body>
 </html>
