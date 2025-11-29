@@ -35,15 +35,8 @@ function removeImage(imageFileName){
     }))();
 }
 
-function beforeClose(e){
+function beforeClose(e) {
     navigator.sendBeacon("/end");
        
     return null;
-<<<<<<< HEAD
 }
-<<<<<<< Updated upstream
-=======
-}
->>>>>>> ea0479c2691fbc4cffdb0552b8d43a239fa2309b
-=======
->>>>>>> Stashed changes
