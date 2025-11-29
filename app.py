@@ -3,9 +3,10 @@ from werkzeug.utils import secure_filename
 
 import os
 import json
-import pdflatex
+import shutil
 import atexit
 import hashlib
+import subprocess
 
 ## setup
 
@@ -16,6 +17,9 @@ envs = [
 
 if not all([i in os.environ for i in envs]):
     os._exit(1)
+
+# will panic if not on system
+PDFTEX_PATH = shutil.which("pdftex")
 
 UPLOADS_FOLDER = os.getenv("LO_UPLOADS")
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
@@ -90,14 +94,19 @@ def compile():
     if "source" not in request.form:
         return render_template('error.html', error="sent compilation task without source"), 400
     
+    source_file = os.path.join(UPLOADS_FOLDER, session['id'], 'source.tex')
     built_pdf = os.path.join(UPLOADS_FOLDER, session['id'], 'compiled.pdf')
+
+    result = subprocess.run([PDFTEX_PATH, "-jobname=compiled", source_file], capture_output=True)
+    print(result)
 
 @app.route("/end", methods=["POST"])
 def end():
     if 'id' not in session:
         return render_template('error.html', error="called endpoint without active session"), 400
 
-    os.rmdir(UPLOADS_FOLDER + session["id"])
+    os.rmdir(os.path.join(UPLOADS_FOLDER, session["id"]))
+
     session.pop("id", default=None)
 
 @app.route("/")
