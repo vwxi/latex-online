@@ -2,11 +2,11 @@
 
 let imageFileNames = [];
 
-fetch('/new'), {
+fetch('/new', {
     method: 'POST'
-}
+})
 
-document.addEventListener('beforeunload', beforeClose);
+window.addEventListener('beforeunload', beforeClose);
 
 const imageInput = document.getElementById("img-input");
 
@@ -27,16 +27,18 @@ function addImage(){
 function removeImage(imageFileName){
     removeItem(imageFileNames, imageFileName);
 
-    fetch('/remove'), {
+    fetch('/remove', {
         method: 'POST',
         body: imageFileName
-    }    
+    });
 }
 
 function beforeClose(e){
     //remove images
     console.log("end");
-    fetch('/end'), {
+    fetch('/end', {
         method: 'POST'
-    }
+    });
+
+    return null;
 }
