@@ -1,3 +1,3 @@
 # latex online
 
-Web-based \( \LaTeX \) editor
+Web-based $\LaTeX\$ editor
