@@ -121,7 +121,6 @@ def compile():
     
     output = send_file(built_pdf, mimetype="application/pdf", download_name="compiled.pdf")
 
-    os.remove(built_pdf)
     os.remove(built_aux)
     os.remove(built_log)
 
