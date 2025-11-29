@@ -1,4 +1,4 @@
-from flask import Flask, session, redirect, url_for, render_template, request
+from flask import Flask, session, redirect, url_for, render_template, request, send_file
 from werkzeug.utils import secure_filename
 
 import os
@@ -28,7 +28,7 @@ if not os.path.exists(UPLOADS_FOLDER):
     os.mkdir(UPLOADS_FOLDER)
 
 def delete_cache_on_exit():
-    os.rmdir(UPLOADS_FOLDER)
+    shutil.rmtree(UPLOADS_FOLDER, ignore_errors=True)
 
 atexit.register(delete_cache_on_exit)
 
@@ -42,20 +42,20 @@ app.secret_key = os.getenv("LO_SECRET_KEY")
 
 @app.route("/new", methods=["POST"])
 def new():
-    if 'id' in session:
+    if 'exists' in session:
         return render_template("error.html", error="called new endpoint with existing session"), 400
     
-    session['id'] = hashlib.sha256(request.remote_addr.encode("utf-8")).hexdigest()
+    session['exists'] = True
     temp_path = os.path.join(UPLOADS_FOLDER, session['id'])
 
     if not os.path.exists(temp_path):
         os.mkdir(temp_path)
     
-    return redirect(url_for("index"))
+    return "", 200
 
 @app.route("/add", methods=["POST"])
 def add_file():
-    if 'id' not in session:
+    if 'exists' not in session:
         return render_template('error.html', error="called endpoint without active session"), 400
 
     if 'file' not in request.files:
@@ -72,7 +72,7 @@ def add_file():
 
 @app.route("/remove", methods=["POST"])
 def remove():
-    if 'id' not in session:
+    if 'exists' not in session:
         return render_template('error.html', error="called endpoint without active session"), 400
 
     if 'filename' not in request.form:
@@ -88,7 +88,7 @@ def remove():
 
 @app.route("/compile", methods=["POST"])
 def compile():
-    if 'id' not in session:
+    if 'exists' not in session:
         return render_template('error.html', error="called endpoint without active session"), 400
 
     if "source" not in request.form:
@@ -98,16 +98,22 @@ def compile():
     built_pdf = os.path.join(UPLOADS_FOLDER, session['id'], 'compiled.pdf')
 
     result = subprocess.run([PDFTEX_PATH, "-jobname=compiled", source_file], capture_output=True)
-    print(result)
+    
+    output = send_file(built_pdf, "application/pdf")
+
+    print(output)
+    os.remove(built_pdf)
+
+    return output
 
 @app.route("/end", methods=["POST"])
 def end():
-    if 'id' not in session:
+    if 'exists' not in session:
         return render_template('error.html', error="called endpoint without active session"), 400
 
-    os.rmdir(os.path.join(UPLOADS_FOLDER, session["id"]))
+    shutil.rmtree(os.path.join(UPLOADS_FOLDER, session["id"]), ignore_errors=True)
 
-    session.pop("id", default=None)
+    session.pop("exists", default=None)
 
 @app.route("/")
 def index():
