@@ -18,8 +18,11 @@ envs = [
 if not all([i in os.environ for i in envs]):
     os._exit(1)
 
-# will panic if not on system
-PDFTEX_PATH = shutil.which("pdftex")
+# will exit if not on system
+PDFLATEX_PATH = shutil.which("pdflatex")
+
+if not PDFLATEX_PATH:
+    os._exit(2)
 
 UPLOADS_FOLDER = os.getenv("LO_UPLOADS")
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
@@ -97,7 +100,7 @@ def compile():
     source_file = os.path.join(UPLOADS_FOLDER, session['id'], 'source.tex')
     built_pdf = os.path.join(UPLOADS_FOLDER, session['id'], 'compiled.pdf')
 
-    result = subprocess.run([PDFTEX_PATH, "-jobname=compiled", source_file], capture_output=True)
+    result = subprocess.run([PDFLATEX_PATH, "-jobname=compiled", source_file], capture_output=True)
     
     output = send_file(built_pdf, "application/pdf")
 
