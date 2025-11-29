@@ -1,37 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <title>Online LaTex Editor</title>
 	    <meta charset="utf-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="{{ url_for('static', filename='js/image-upload.js') }}" defer></script>
-        <title>online LaTex editor</title>
+        <script src="{{ url_for('static', filename='js/editor.js')}}" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     </head>
-    <body>
-        <h1>LazyTex</h1>
-        <div id="image-file-container">
-            <h2>Images</h2>
-            <input type="file" accept=".png, .jpg, .jpeg" id="img-input">
+    <body style="font-family: Bentham">
+        <h1 class="content-center text-center text-6xl rounded-md bg-pink-600 h-20 mx-20 my-5">LazyTex</h1>
+        <div id="image-file-container" class="inline-block border-3 h-110 ml-10 w-41.25">
+            <h2 class="text-center text-3xl w-40 bg-pink-300 h-10">Images</h2>
+            <input type="file" accept=".png, .jpg, .jpeg" id="img-input" class="w-40">
         </div>
-        <div id="left-box">
-            <textarea id="editor">
+        <div id="left-box" class="inline-flex relative bottom-15 w-40">
+            <textarea id="editor" class=" absolute top-0 left-0 text-transparent z-2 h-110 w-100" style="resize:none">
+
+    \documentclass{article}
+
+    \title{Title}
+    \author{Name}
+    \date{Date}
+
+    \begin{document}
+
+    \maketitle
+
+    \section{Introduction}
+
+    \end{document}
             </textarea>
-            <pre><code>
-                \documentclass{article}
+            <pre class="h-0"><code class="absolute top-0 left-0 border-3 h-110 w-100" style="font-family: Bentham">
+    \documentclass{article}
 
-                \title{Title}
-                \author{Name}
-                \date{Date}
+    \title{Title}
+    \author{Name}
+    \date{Date}
 
-                \begin{document}
+    \begin{document}
 
-                \maketitle
+    \maketitle
 
-                \section{Introduction}
+    \section{Introduction}
 
-                \end{document}
-            </pre></code>
-        </div>
-        <iframe id="loaded-pdf"></iframe>
+    \end{document}
+            </code></pre>
+        <iframe id="loaded-pdf" class="flex ml-101 w-100 h-110 border-3"></iframe>
         <button type="submit" id="compile">Compile</button>
         <button type="submit" id="export">Export</button>
     </body>
