@@ -23,15 +23,10 @@ function updateDisplay() {
 
 const compileButton = document.getElementById("compile");
 compileButton.addEventListener("click", e => {
-    var resp = (async () => {
-        var data = new FormData();
-        data.append("source", textEditor.value);
-        return fetch('/compile', {
-            method: 'POST',
-            body: data
-        });
-    })();
+    var data = new FormData();
+    data.append("source", textEditor.value);
 
-    
+    var resp = (async () => await fetch('/compile', { method: 'POST', body: data }))();
+    console.log(resp);
 });
 

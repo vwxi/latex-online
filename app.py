@@ -98,21 +98,29 @@ def compile():
     if "source" not in request.form:
         return render_template('error.html', error="sent compilation task without source"), 400
     
-    source_file = os.path.join(UPLOADS_FOLDER, session['id'], 'source.tex')
+    source_dir = os.path.join(UPLOADS_FOLDER, session['id'])
+    source_file = os.path.join(source_dir, 'source.tex')
 
     with open(source_file, "wb") as f:
         f.write(request.form["source"].encode("utf-8"))
 
-    built_pdf = os.path.join(UPLOADS_FOLDER, session['id'], 'compiled.pdf')
-
-    result = subprocess.run([PDFLATEX_PATH, "-jobname=compiled", source_file], capture_output=True)
+    built_pdf = os.path.join(source_dir, 'compiled.pdf')
+    built_aux = os.path.join(source_dir, 'compiled.aux')
+    built_log = os.path.join(source_dir, 'compiled.log')
+    
+    result = subprocess.run([PDFLATEX_PATH, 
+                             "-jobname=compiled", 
+                             f"-output-directory={source_dir}", 
+                             source_file], 
+                             capture_output=True)
     
     print(result)
     
-    output = send_file(built_pdf, "application/pdf")
+    output = send_file(built_pdf, mimetype="application/pdf", download_name="compiled.pdf")
 
-    print(output)
     os.remove(built_pdf)
+    os.remove(built_aux)
+    os.remove(built_log)
 
     return output
 
