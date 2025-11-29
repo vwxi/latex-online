@@ -2,9 +2,9 @@
 
 let imageFileNames = [];
 
-await fetch('/new', {
+(async () => await fetch('/new', {
     method: 'POST'
-});
+}))();
 
 const imageInput = document.getElementById("img-input");
 const imageFileContainer = document.getElementById("image-file-container");

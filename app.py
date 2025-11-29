@@ -99,9 +99,15 @@ def compile():
         return render_template('error.html', error="sent compilation task without source"), 400
     
     source_file = os.path.join(UPLOADS_FOLDER, session['id'], 'source.tex')
+
+    with open(source_file, "wb") as f:
+        f.write(request.form["source"].encode("utf-8"))
+
     built_pdf = os.path.join(UPLOADS_FOLDER, session['id'], 'compiled.pdf')
 
     result = subprocess.run([PDFLATEX_PATH, "-jobname=compiled", source_file], capture_output=True)
+    
+    print(result)
     
     output = send_file(built_pdf, "application/pdf")
 
