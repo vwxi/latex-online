@@ -117,7 +117,8 @@ def end():
 
     shutil.rmtree(os.path.join(UPLOADS_FOLDER, session["id"]), ignore_errors=True)
 
-    session.pop("exists", default=None)
+    session.clear()
+    return "", 200
 
 @app.route("/")
 def index():
