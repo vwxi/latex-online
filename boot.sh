@@ -1,3 +1,3 @@
 #!/bin/bash
-flask db update
-gunicorn -b 0.0.0.0:5000 app:app
+python3 -m flask db update
+python3 -m gunicorn -b 0.0.0.0:5000 app:app
