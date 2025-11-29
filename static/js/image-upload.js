@@ -24,10 +24,31 @@ function addImage(){
       body: data
     }).then((response) => response.json())
       .then((val) => imageFileNames.push(val)))();
+
+    imageFileName = imageFileNames[length(imageFileNames) - 1]
+
+    const imageDisplaySpan = document.createElement("span");
+    const imageDisplayButton = document.createElement("button");
+    const imageDisplayText = document.createElement("p");
+
+    imageDisplayText.innerText = imageFileName;
+
+    imageDisplayButton.innerText = 'Delete Image';
+    imageDisplayButton.type = 'button';
+    imageDisplayButton.id = imageFileName;
+
+    imageDisplayButton.addEventListener("change", removeImage);
+
+    imageDisplaySpan.appendChild(imageDisplayText);
+    imageDisplaySpan.appendChild(imageDisplayButton);
+    
+    imageFileContainer.appendChild(imageDisplaySpan);
 }
 
-function removeImage(imageFileName){
-    removeItem(imageFileNames, imageFileName);
+function removeImage(e){
+    imageFileName = e.id;
+
+    e.target.parentNode.remove();
 
     (async () => await fetch('/remove', {
         method: 'POST',
