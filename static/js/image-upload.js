@@ -4,11 +4,11 @@ let imageFileNames = [];
 
 fetch('/new', {
     method: 'POST'
-})
-
-window.addEventListener('beforeunload', beforeClose);
+});
 
 const imageInput = document.getElementById("img-input");
+
+window.addEventListener('beforeunload', beforeClose);
 
 imageInput.addEventListener("change", addImage);
 
@@ -22,6 +22,8 @@ function addImage(){
       method: 'POST',
       body: data
     }));
+
+    
 }
 
 function removeImage(imageFileName){
@@ -34,11 +36,20 @@ function removeImage(imageFileName){
 }
 
 function beforeClose(e){
-    //remove images
-    console.log("end");
     fetch('/end', {
-        method: 'POST'
+        method: 'POST',
+        keepalive: true
     });
-
+    
+    deleteAllCookies();
+    
     return null;
+}
+
+function deleteAllCookies() {
+    document.cookie.split(';').forEach(cookie => {
+        const eqPos = cookie.indexOf('=');
+        const name = eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
+        document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    });
 }

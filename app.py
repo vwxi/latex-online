@@ -45,6 +45,7 @@ app.secret_key = os.getenv("LO_SECRET_KEY")
 
 @app.route("/new", methods=["POST"])
 def new():
+    print(session)
     if 'id' in session:
         return render_template("error.html", error="called new endpoint with existing session"), 400
     
