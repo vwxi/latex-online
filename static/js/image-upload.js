@@ -41,8 +41,11 @@ function addImage(){
     imageDisplaySpan.appendChild(imageDisplayButton);
     
     imageFileContainer.appendChild(imageDisplaySpan);
+<<<<<<< Updated upstream
 =======
 >>>>>>> ea0479c2691fbc4cffdb0552b8d43a239fa2309b
+=======
+>>>>>>> Stashed changes
 }
 
 function removeImage(imageFileName){
@@ -60,6 +63,9 @@ function beforeClose(e){
     return null;
 <<<<<<< HEAD
 }
+<<<<<<< Updated upstream
 =======
 }
 >>>>>>> ea0479c2691fbc4cffdb0552b8d43a239fa2309b
+=======
+>>>>>>> Stashed changes
