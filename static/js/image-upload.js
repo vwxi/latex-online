@@ -19,13 +19,13 @@ function addImage(){
     var data = new FormData();
     data.append('file', imageInput.files[0]);
 
-    (async () => await fetch('/add', {
+    fetch('/add', {
       method: 'POST',
       body: data
-    }).then((response) => response.json())
-      .then((val) => imageFileNames.push(val)))();
+    });
 
-    var imageFileName = imageFileNames[imageFileNames.length - 1];
+    var imageFileName = document.querySelector('input[type=file]').files[0].name;
+    imageFileNames.push(imageFileName);
 
     const imageDisplaySpan = document.createElement("span");
     const imageDisplayButton = document.createElement("button");
