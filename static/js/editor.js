@@ -21,9 +21,12 @@ function updateDisplay() {
     codeDisplay.innerHTML = result;
 }
 
-
 const compileButton = document.getElementById("compile");
 compileButton.addEventListener("click", e => {
-    console.log(textEditor.value)
+    var data = new FormData();
+    data.append("source", textEditor.value);
+
+    var resp = (async () => await fetch('/compile', { method: 'POST', body: data }))();
+    console.log(resp);
 });
 

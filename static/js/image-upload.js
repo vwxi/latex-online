@@ -2,9 +2,9 @@
 
 let imageFileNames = [];
 
-await fetch('/new', {
+(async () => await fetch('/new', {
     method: 'POST'
-});
+}))();
 
 const imageInput = document.getElementById("img-input");
 const imageFileContainer = document.getElementById("image-file-container");
@@ -25,7 +25,7 @@ function addImage(){
     }).then((response) => response.json())
       .then((val) => imageFileNames.push(val)))();
 
-    imageFileName = imageFileNames[length(imageFileNames) - 1]
+    var imageFileName = imageFileNames[imageFileNames.length - 1];
 
     const imageDisplaySpan = document.createElement("span");
     const imageDisplayButton = document.createElement("button");
@@ -37,7 +37,7 @@ function addImage(){
     imageDisplayButton.type = 'button';
     imageDisplayButton.id = imageFileName;
 
-    imageDisplayButton.addEventListener("change", removeImage);
+    imageDisplayButton.addEventListener("click", removeImage);
 
     imageDisplaySpan.appendChild(imageDisplayText);
     imageDisplaySpan.appendChild(imageDisplayButton);
@@ -46,7 +46,7 @@ function addImage(){
 }
 
 function removeImage(e){
-    imageFileName = e.id;
+    var imageFileName = e.id;
 
     e.target.parentNode.remove();
 
