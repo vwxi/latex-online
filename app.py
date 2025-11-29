@@ -1,7 +1,11 @@
 from flask import Flask, session, redirect, url_for, render_template, request
+from werkzeug.utils import secure_filename
+
 import os
+import json
 import pdflatex
 import atexit
+import hashlib
 
 ## setup
 
@@ -26,20 +30,74 @@ atexit.register(delete_cache_on_exit)
 
 ## backend
 
+def is_file_allowed(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 app = Flask(__name__)
 app.secret_key = os.getenv("LO_SECRET_KEY")
 
 @app.route("/new", methods=["POST"])
 def new():
     if 'id' in session:
-        return render_template("error.html")
+        return render_template("error.html", error="called new endpoint with existing session"), 400
     
-    session['id'] = request.form['id']
+    session['id'] = hashlib.sha256(request.remote_addr.encode("utf-8")).hexdigest()
+    temp_path = os.path.join(UPLOADS_FOLDER, session['id'])
 
+    if not os.path.exists(temp_path):
+        os.mkdir(temp_path)
+    
     return redirect(url_for("index"))
+
+@app.route("/add", methods=["POST"])
+def add_file():
+    if 'id' not in session:
+        return render_template('error.html', error="called endpoint without active session"), 400
+
+    if 'file' not in request.files:
+        return render_template('error.html', error="called add endpoint without adding a file"), 400
+    
+    file = request.files['file']
+    if len(file.filename) == 0:
+        return render_template('error.html', error="empty filename"), 400
+    
+    if file and is_file_allowed(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(UPLOADS_FOLDER, session['id'], filename))
+        return json.loads({ "filename": filename }), 200
+
+@app.route("/remove", methods=["POST"])
+def remove():
+    if 'id' not in session:
+        return render_template('error.html', error="called endpoint without active session"), 400
+
+    if 'filename' not in request.form:
+        return render_template('error.html', error="filename not in delete request"), 400   
+
+    path = os.path.join(UPLOADS_FOLDER, session['id'], request.form["filename"])
+    if not os.path.exists(path):
+        return render_template('error.html', error="cannot delete file that does not exist"), 400
+    
+    os.remove(path)
+
+    return json.loads({ "filename": request.form["filename"] }), 200
+
+@app.route("/compile", methods=["POST"])
+def compile():
+    if 'id' not in session:
+        return render_template('error.html', error="called endpoint without active session"), 400
+
+    if "source" not in request.form:
+        return render_template('error.html', error="sent compilation task without source"), 400
+    
+    built_pdf = os.path.join(UPLOADS_FOLDER, session['id'], 'compiled.pdf')
 
 @app.route("/end", methods=["POST"])
 def end():
+    if 'id' not in session:
+        return render_template('error.html', error="called endpoint without active session"), 400
+
+    os.rmdir(UPLOADS_FOLDER + session["id"])
     session.pop("id", default=None)
 
 @app.route("/")
