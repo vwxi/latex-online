@@ -7,6 +7,7 @@ fetch('/new', {
 });
 
 const imageInput = document.getElementById("img-input");
+const imageFileContainer = document.getElementById("image-file-container");
 
 window.addEventListener('unload', beforeClose);
 
@@ -18,10 +19,30 @@ function addImage(){
     var data = new FormData();
     data.append('file', imageInput.files[0]);
 
-    imageFileNames.push(fetch('/add', {
+    let imageFileName = "";
+    imageFileName = (fetch('/add', {
       method: 'POST',
       body: data
     }));
+<<<<<<< HEAD
+
+    imageFileNames.push(imageFileName);
+
+    const imageDisplaySpan = document.createElement("span");
+    const imageDisplayButton = document.createElement("button");
+    const imageDisplayText = document.createElement("p");
+
+    imageDisplayText.innerText = imageFileName;
+
+    imageDisplayButton.innerText = 'Delete Image';
+    imageDisplayButton.type = 'button';
+
+    imageDisplaySpan.appendChild(imageDisplayText);
+    imageDisplaySpan.appendChild(imageDisplayButton);
+    
+    imageFileContainer.appendChild(imageDisplaySpan);
+=======
+>>>>>>> ea0479c2691fbc4cffdb0552b8d43a239fa2309b
 }
 
 function removeImage(imageFileName){
@@ -37,4 +58,8 @@ function beforeClose(e){
     navigator.sendBeacon("/end");
        
     return null;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> ea0479c2691fbc4cffdb0552b8d43a239fa2309b
