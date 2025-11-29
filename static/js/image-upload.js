@@ -9,7 +9,7 @@ fetch('/new', {
 const imageInput = document.getElementById("img-input");
 const imageFileContainer = document.getElementById("image-file-container");
 
-window.addEventListener('beforeunload', beforeClose);
+window.addEventListener('unload', beforeClose);
 
 imageInput.addEventListener("change", addImage);
 
@@ -24,6 +24,7 @@ function addImage(){
       method: 'POST',
       body: data
     }));
+<<<<<<< HEAD
 
     imageFileNames.push(imageFileName);
 
@@ -40,6 +41,8 @@ function addImage(){
     imageDisplaySpan.appendChild(imageDisplayButton);
     
     imageFileContainer.appendChild(imageDisplaySpan);
+=======
+>>>>>>> ea0479c2691fbc4cffdb0552b8d43a239fa2309b
 }
 
 function removeImage(imageFileName){
@@ -52,12 +55,11 @@ function removeImage(imageFileName){
 }
 
 function beforeClose(e){
-    fetch('/end', {
-        method: 'POST',
-        keepalive: true
-    });
-    
-    deleteAllCookies();
-    
+    navigator.sendBeacon("/end");
+       
     return null;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> ea0479c2691fbc4cffdb0552b8d43a239fa2309b
