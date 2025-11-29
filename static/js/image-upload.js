@@ -1,13 +1,42 @@
 "use strict";
 
+let imageFileNames = [];
+
+fetch('/new'), {
+    method: 'POST'
+}
+
+document.addEventListener('beforeunload', beforeClose);
+
 const imageInput = document.getElementById("img-input");
 
-//imageButton.addEventListener("change", addImage);
+imageInput.addEventListener("change", addImage);
 
-var data = new FormData()
-data.append('file', imageInput.files[0])
+function addImage(){
+    console.log("Added image");
 
-fetch('/new', {
-  method: 'POST',
-  body: data
-})  
+    var data = new FormData();
+    data.append('file', imageInput.files[0]);
+
+    imageFileNames.push(fetch('/add', {
+      method: 'POST',
+      body: data
+    }));
+}
+
+function removeImage(imageFileName){
+    removeItem(imageFileNames, imageFileName);
+
+    fetch('/remove'), {
+        method: 'POST',
+        body: imageFileName
+    }    
+}
+
+function beforeClose(e){
+    //remove images
+    console.log("end");
+    fetch('/end'), {
+        method: 'POST'
+    }
+}
