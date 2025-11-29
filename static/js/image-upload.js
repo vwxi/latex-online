@@ -2,11 +2,12 @@
 
 let imageFileNames = [];
 
-fetch('/new', {
+await fetch('/new', {
     method: 'POST'
 });
 
 const imageInput = document.getElementById("img-input");
+const imageFileContainer = document.getElementById("image-file-container");
 
 window.addEventListener('unload', beforeClose);
 
@@ -18,22 +19,23 @@ function addImage(){
     var data = new FormData();
     data.append('file', imageInput.files[0]);
 
-    imageFileNames.push(fetch('/add', {
+    (async () => await fetch('/add', {
       method: 'POST',
       body: data
-    }));
+    }).then((response) => response.json())
+      .then((val) => imageFileNames.push(val)))();
 }
 
 function removeImage(imageFileName){
     removeItem(imageFileNames, imageFileName);
 
-    fetch('/remove', {
+    (async () => await fetch('/remove', {
         method: 'POST',
         body: imageFileName
-    });
+    }))();
 }
 
-function beforeClose(e){
+function beforeClose(e) {
     navigator.sendBeacon("/end");
        
     return null;
